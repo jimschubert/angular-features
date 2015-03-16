@@ -32,9 +32,31 @@ Include some partial
 
     <div ng-include="'./partial.html'"></div>
 
+Partial's contents are:
+
+    <div>
+        <p>
+            <h2>This is an example</h2>
+            <em>Feature exclusion should include the example feature below:</em>
+        </p>
+        <p ng-feature="Sample">
+            This is an example feature
+        </p>
+    </div>
+
+Configure your interceptor to override the feature attribute prefix from the default of `data` to `ng` and add `Sample` as an available feature (remember to include `inc.features.interceptors` dependency). Then push `featureExclusion` to available interceptors:
+
+    angular.module('myApp',['inc.features.interceptors'])
+            .config(function($httpProvider, featureExclusionProvider){
+                featureExclusionProvider
+                        .setPrefix('ng')
+                        .defineAllFeatures(['Sample']);
+                $httpProvider.interceptors.push('featureExclusion');
+            });
+
 ## Options
 
-_TODO_
+_TODO_ List out available options on the interceptor's provider.
 
 ## Todos
 
