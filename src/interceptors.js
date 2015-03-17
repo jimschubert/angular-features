@@ -1,6 +1,6 @@
 (function(){
     'use strict';
-    var MODULE_NAME = 'inc.features.interceptors',
+    var MODULE_NAME = 'inc.features.services',
         FEATURE_INCLUSION_SERVICE = 'featureInclusion';
 
     var module = angular.module(MODULE_NAME,['inc.features.urlparser']);
@@ -52,7 +52,7 @@
         };
 
         /**
-         * Adds a file extension to be handled by the interceptor.
+         * Adds a file extension to be handled by the services.
          * Default settings include only files with the 'html' extension.
          *
          * @param {String} ext The extension to add.
@@ -133,96 +133,101 @@
         };
 
         /**
-         * Interceptor factory definition for feature inclusion
+         * Service definition for feature inclusion
          * @type {*[]}
          */
        this.$get = ['$log', '$q', '$templateCache', 'urlparser', function($log, $q, $templateCache, urlparser){
            var EXT = /[^\.]*?\.(.*)/,
                key = [prefix,attribute].join('-');
 
-           var interceptor = {
+           function FeatureInclusionService(features, extensions){
+               // To prevent runtime access to the actual arrays, these are clones.
+               // The interceptor methods will still use the closed over arrays, so directives can't modify
+               // these definitions dynamically (that would cause a lot of problems).
+               this.features = features;
+               this.extensions = extensions;
+           }
 
-               /**
-                * Provides an interceptor for an $http response
-                *
-                * @param {Object} response
-                * @param {Object} response.config
-                * @param {*} response.data
-                * @param {Function} response.headers
-                * @param {Number} response.status
-                * @param {String} response.statusText
-                * @returns {*}
-                */
-               response: function(response){
-                   var contents,
-                       url,
-                       extension;
+           /**
+            * Provides a services containing an interceptor for an $http response
+            *
+            * @param {Object} response
+            * @param {Object} response.config
+            * @param {*} response.data
+            * @param {Function} response.headers
+            * @param {Number} response.status
+            * @param {String} response.statusText
+            * @returns {*}
+            */
+           FeatureInclusionService.prototype.response = function FeatureInclusionServiceResponseInterceptor(response){
+               var contents,
+                   url,
+                   extension;
 
-                   try {
-                       // If the url is cached and index 0 is not a string, it was cached elsewhere, otherwise use it here.
-                       if(cache && (contents = $templateCache.get(response.config.url)) && angular.isString(contents[0])){
-                           response.data = contents;
+               try {
+                   // If the url is cached and index 0 is not a string, it was cached elsewhere, otherwise use it here.
+                   if(cache && (contents = $templateCache.get(response.config.url)) && angular.isString(contents[0])){
+                       response.data = contents;
+                   } else {
+                       // Get a workable URL information object
+                       url = urlparser.parse(response.config.url);
+
+                       // If this interceptor is handling the extension
+                       if ((extension = EXT.exec(url.file)) && -1 !== extensions.indexOf(extension[1])) {
+                           // get the contents of the response
+                           contents = angular.element(response.data);
+                           if (angular.isDefined(contents[0])) {
+                               contents = contents[0];
+
+                               // find all feature elements in the response
+                               var featureElements = contents.querySelectorAll('['+key+']');
+
+                               if (featureElements.length === 1 && featureElements[0] === contents) {
+                                   contents.innerHTML = '';
+                               } else {
+                                   // This walks all feature elements in the response and removes any
+                                   // to which the user hasn't been given explicit access
+                                   angular.forEach(featureElements, function (child) {
+                                       // TODO: Verify this excludes or includes features correctly
+                                       if (-1 === features.indexOf(angular.element(child).attr(key))) {
+                                           child.remove();
+                                       }
+                                   });
+                               }
+
+                               if (cache) {
+                                   $templateCache.put(response.config.url, contents.innerHTML);
+                               }
+
+                               // Update the response's data with the modified contents, including only user's accessible features
+                               response.data = contents.innerHTML;
+                           }
                        } else {
-                           // Get a workable URL information object
-                           url = urlparser.parse(response.config.url);
-
-                           // If this interceptor is handling the extension
-                           if ((extension = EXT.exec(url.file)) && -1 !== extensions.indexOf(extension[1])) {
-                               // get the contents of the response
-                               contents = angular.element(response.data);
-                               if (angular.isDefined(contents[0])) {
-                                   contents = contents[0];
-
-                                   // find all feature elements in the response
-                                   var featureElements = contents.querySelectorAll('['+key+']');
-
-                                   if (featureElements.length === 1 && featureElements[0] === contents) {
-                                       contents.innerHTML = '';
-                                   } else {
-                                       // This walks all feature elements in the response and removes any
-                                       // to which the user hasn't been given explicit access
-                                       angular.forEach(featureElements, function (child) {
-                                           // TODO: Verify this excludes or includes features correctly
-                                           if (-1 === features.indexOf(angular.element(child).attr(key))) {
-                                               child.remove();
-                                           }
-                                       });
-                                   }
-
-                                   if (cache) {
-                                       $templateCache.put(response.config.url, contents.innerHTML);
-                                   }
-
-                                   // Update the response's data with the modified contents, including only user's accessible features
-                                   response.data = contents.innerHTML;
-                               }
-                           } else {
-                               if (loggingEnabled) {
-                                   $log.debug(logPrefix + 'FileType not included for processing');
-                               }
+                           if (loggingEnabled) {
+                               $log.debug(logPrefix + 'FileType not included for processing');
                            }
                        }
-                   } catch (e){
-                       $log.error(logPrefix+'Unexpected error.');
                    }
-                   return response;
-               },
-
-               /**
-                * Handles response errors. Simply logs (if enabled) a message and rejects the response.
-                *
-                * @param response
-                * @returns {*}
-                */
-               responseError: function(response){
-                   if(loggingEnabled) {
-                       $log.warn(logPrefix+'Unable to evaluate response due to external error');
-                   }
-                   return $q.reject(response);
+               } catch (e){
+                   $log.error(logPrefix+'Unexpected error.');
                }
+               return response;
            };
 
-           return interceptor;
+           /**
+            * Handles response errors. Simply logs (if enabled) a message and rejects the response.
+            *
+            * @param response
+            * @returns {*}
+            */
+           FeatureInclusionService.prototype.responseError = function(response){
+               if(loggingEnabled) {
+                   $log.warn(logPrefix+'Unable to evaluate response due to external error');
+               }
+               return $q.reject(response);
+           };
+
+           return new FeatureInclusionService(features.slice(0), extensions.slice(0));
        }];
     });
 })();

@@ -2,6 +2,6 @@
 
 (function() {
     "use strict";
-    angular.module("inc.features", [ "inc.features.urlparser", "inc.features.interceptors" ]);
+    angular.module("inc.features", [ "inc.features.urlparser", "inc.features.services" ]);
 })();
 //# sourceMappingURL=angular-features.all.js.map
