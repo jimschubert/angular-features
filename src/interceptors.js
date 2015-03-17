@@ -1,20 +1,20 @@
 (function(){
     'use strict';
     var MODULE_NAME = 'inc.features.interceptors',
-        FEATURE_EXCLUSION_SERVICE = 'featureExclusion';
+        FEATURE_INCLUSION_SERVICE = 'featureInclusion';
 
     var module = angular.module(MODULE_NAME,['inc.features.urlparser']);
 
     /**
      * Defines the module for feature exclusion
      */
-    module.provider(FEATURE_EXCLUSION_SERVICE, function FeatureExclusionProvider(){
+    module.provider(FEATURE_INCLUSION_SERVICE, function FeatureInclusionProvider(){
         var self = this;
         var prefix = 'data',
             attribute = 'feature',
             extensions = ['html'],
             loggingEnabled = true,
-            logPrefix = '['+MODULE_NAME+'|'+FEATURE_EXCLUSION_SERVICE+'] ',
+            logPrefix = '['+MODULE_NAME+'|'+FEATURE_INCLUSION_SERVICE+'] ',
             features = [],
             cache = true;
 
@@ -24,7 +24,7 @@
          *
          * @param {String} p The prefix to be used for feature detection attributes.
          *
-         * @returns {FeatureExclusionProvider}
+         * @returns {FeatureInclusionProvider}
          */
         self.setPrefix = function(p){
             if(!angular.isString(p)){
@@ -40,7 +40,7 @@
          *
          * @param {String} a The attribute key which defines a feature
          *
-         * @returns {FeatureExclusionProvider}
+         * @returns {FeatureInclusionProvider}
          */
         self.setAttribute = function(a){
             if(!angular.isString(a)){
@@ -57,7 +57,7 @@
          *
          * @param {String} ext The extension to add.
          *
-         * @returns {FeatureExclusionProvider}
+         * @returns {FeatureInclusionProvider}
          */
         self.addExtension = function(ext){
             if(!angular.isString(ext)){
@@ -75,7 +75,7 @@
          *
          * @param {Boolean} [val] True or false, whether or not to cache responses.
          *
-         * @returns {FeatureExclusionProvider}
+         * @returns {FeatureInclusionProvider}
          */
         self.enableCaching = function(val){
             if(angular.isUndefined(val)){
@@ -90,7 +90,7 @@
          *
          * @param {Boolean} [val] True or false, whether or not to enable internal logging.
          *
-         * @returns {FeatureExclusionProvider}
+         * @returns {FeatureInclusionProvider}
          */
         self.enableLogging = function(val){
             if(angular.isUndefined(val)){
@@ -106,7 +106,7 @@
          *
          * @param {String} feature The feature to make visible to the user
          *
-         * @returns {FeatureExclusionProvider}
+         * @returns {FeatureInclusionProvider}
          */
         self.addFeature = function(feature){
             if(-1===features.indexOf(feature)) {
@@ -121,7 +121,7 @@
          *
          * @param {String[]} f The array of features to enable for a user.
          *
-         * @returns {FeatureExclusionProvider}
+         * @returns {FeatureInclusionProvider}
          */
         self.defineAllFeatures = function(f){
             if(angular.isArray(f)) {
@@ -133,7 +133,7 @@
         };
 
         /**
-         * Interceptor factory definition for featureExclusion
+         * Interceptor factory definition for feature inclusion
          * @type {*[]}
          */
        this.$get = ['$log', '$q', '$templateCache', 'urlparser', function($log, $q, $templateCache, urlparser){

@@ -39,5 +39,5 @@ _TODO_
 ## Todos
 
 * Close over configured settings to make direct modifications to features a little more difficult
-* Expose features via `featureExclusion` service to be consumed by a directive
-* Create a directive constructed from `featureExclusion` settings (e.g. `data-feature` or `ng-feature`, whatever is configured)
+* Expose features via `featureInclusion` service to be consumed by a directive
+* Create a directive constructed from `featureInclusion` settings (e.g. `data-feature` or `ng-feature`, whatever is configured)

@@ -17,12 +17,12 @@
     angular.module('myApp',['inc.features.interceptors'])
             .controller('MainController', function($http){
             })
-            .config(function($httpProvider, featureExclusionProvider){
-                featureExclusionProvider
+            .config(function($httpProvider, featureInclusionProvider){
+                featureInclusionProvider
                         .setPrefix('ng')
                         .defineAllFeatures(['Sample']);
 
-                $httpProvider.interceptors.push('featureExclusion');
+                $httpProvider.interceptors.push('featureInclusion');
             });
 </script>
 </body>
