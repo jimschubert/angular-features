@@ -58,8 +58,3 @@ Configure your interceptor to override the feature attribute prefix from the def
 
 _TODO_ List out available options on the interceptor's provider.
 
-## Todos
-
-* Close over configured settings to make direct modifications to features a little more difficult
-* Expose features via `featureExclusion` service to be consumed by a directive
-* Create a directive constructed from `featureExclusion` settings (e.g. `data-feature` or `ng-feature`, whatever is configured)
