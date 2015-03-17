@@ -2,6 +2,8 @@
 
 (function() {
     "use strict";
+    // Source: src/all.js
+    angular.module("inc.features", [ "inc.features.urlparser", "inc.features.interceptors" ]);
     // Source: src/interceptors.js
     (function() {
         var MODULE_NAME = "inc.features.interceptors", FEATURE_INCLUSION_SERVICE = "featureInclusion";
