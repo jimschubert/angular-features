@@ -1,5 +1,7 @@
 # angular-features
 
+[![Join the chat at https://gitter.im/jimschubert/angular-features](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/jimschubert/angular-features?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Code Climate](https://codeclimate.com/github/jimschubert/angular-features/badges/gpa.svg)](https://codeclimate.com/github/jimschubert/angular-features)
 
 Easily constrain client access to beta features.
