@@ -1,5 +1,6 @@
 (function(){
     'use strict';
+    /* global angular */
     var MODULE_NAME = 'inc.features.services',
         FEATURE_INCLUSION_SERVICE = 'featureInclusion';
 
@@ -180,6 +181,7 @@
                                contents = contents[0];
 
                                // find all feature elements in the response
+                               // TODO: Support query selector with optional data- prefix?
                                var featureElements = contents.querySelectorAll('['+key+']');
 
                                if (featureElements.length === 1 && featureElements[0] === contents) {
@@ -210,6 +212,7 @@
                    }
                } catch (e){
                    $log.error(logPrefix+'Unexpected error.');
+                   $q.reject(response);
                }
                return response;
            };

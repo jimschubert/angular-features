@@ -113,7 +113,26 @@ module.exports = function(grunt) {
             cleanup: {
                 command: 'rm <%= pkg.name %>.js'
             }
-        }
+        },
+        
+        bump: {
+            options: {
+                files: ['package.json', 'bower.json'],
+                updateConfigs: [],
+                commit: true,
+                commitMessage: 'Release v%VERSION%',
+                commitFiles: ['package.json', 'bower.json'],
+                createTag: true,
+                tagName: 'v%VERSION%',
+                tagMessage: 'Version %VERSION%',
+                push: true,
+                pushTo: 'upstream',
+                gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
+                globalReplace: false,
+                prereleaseName: false,
+                regExp: false
+            }
+        },
     });
 
     grunt.loadNpmTasks('grunt-contrib-clean');
@@ -121,7 +140,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-shell');
+    grunt.loadNpmTasks('grunt-bump');
 
     // Default task(s).
-    grunt.registerTask('default', ['clean','jshint','concat','uglify','shell:cleanup']);
+    grunt.registerTask('b', ['bump-only:minor']);
+    grunt.registerTask('default', ['clean','jshint', 'concat','uglify','shell:cleanup']);
 };

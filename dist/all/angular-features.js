@@ -1,4 +1,4 @@
-/*! angular-features v0.0.1 2015-03-16, Jim Schubert (c) 2015 MIT License */
+/*! angular-features v0.2.0 2015-09-13, Jim Schubert (c) 2015 MIT License */
 
 (function() {
     "use strict";
@@ -6,6 +6,7 @@
     angular.module("inc.features", [ "inc.features.urlparser", "inc.features.services" ]);
     // Source: src/interceptors.js
     (function() {
+        /* global angular */
         var MODULE_NAME = "inc.features.services", FEATURE_INCLUSION_SERVICE = "featureInclusion";
         var module = angular.module(MODULE_NAME, [ "inc.features.urlparser" ]);
         /**
@@ -158,6 +159,7 @@
                                 if (angular.isDefined(contents[0])) {
                                     contents = contents[0];
                                     // find all feature elements in the response
+                                    // TODO: Support query selector with optional data- prefix?
                                     var featureElements = contents.querySelectorAll("[" + key + "]");
                                     if (featureElements.length === 1 && featureElements[0] === contents) {
                                         contents.innerHTML = "";
@@ -185,6 +187,7 @@
                         }
                     } catch (e) {
                         $log.error(logPrefix + "Unexpected error.");
+                        $q.reject(response);
                     }
                     return response;
                 };

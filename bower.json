@@ -1,0 +1,23 @@
+{
+  "name": "angular-features",
+  "version": "0.2.0",
+  "homepage": "https://github.com/jimschubert/angular-features",
+  "authors": [
+    "Jim Schubert <james.schubert@gmail.com>"
+  ],
+  "description": "Angular 1.x HTTP interceptor to conditionally include or exclude features based on server-side rendered flags.",
+  "main": "dist/all/angular-features.min.js",
+  "keywords": [
+    "angular",
+    "feature",
+    "flags"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
