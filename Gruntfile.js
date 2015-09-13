@@ -15,7 +15,7 @@ module.exports = function(grunt) {
         },
         uglify: {
             options: {
-                banner: '/*! <%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %>, <%= pkg.author %> (c) <%= grunt.template.today("yyyy") %> MIT License */\n',
+                banner: '/*!\n<%= pkg.name %> v<%= pkg.version %> <%= grunt.template.today("yyyy-mm-dd") %>, <%= pkg.author %> (c) <%= grunt.template.today("yyyy") %> MIT License\nPurl: Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.\n*/',
                 // mangle: false,
                 sourceMap: true,
                 enclose: true

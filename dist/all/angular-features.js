@@ -1,5 +1,7 @@
-/*! angular-features v0.2.0 2015-09-13, Jim Schubert (c) 2015 MIT License */
-
+/*!
+angular-features v0.3.0 2015-09-13, Jim Schubert (c) 2015 MIT License
+Purl: Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.
+*/
 (function() {
     "use strict";
     // Source: src/all.js
@@ -245,6 +247,12 @@
                 window.purl = factory();
             }
         })(function() {
+            /*
+        * Purl (A JavaScript URL parser) v2.3.1
+        * Developed and maintanined by Mark Perkins, mark@allmarkedup.com
+        * Source repository: https://github.com/allmarkedup/jQuery-URL-Parser
+        * Licensed under an MIT-style license. See https://github.com/allmarkedup/jQuery-URL-Parser/blob/master/LICENSE for details.
+        */
             var tag2attr = {
                 a: "href",
                 img: "src",
